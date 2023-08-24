@@ -1,75 +1,78 @@
-module.exports = function toReadable (number) {
-  const singles = [
-    'zero',
-    'one',
-    'two',
-    'three',
-    'four',
-    'five',
-    'six',
-    'seven',
-    'eight',
-    'nine',
-    'ten',
-    'eleven',
-    'twelve',
-    'thirteen',
-    'fourteen',
-    'fifteen',
-    'sixteen',
-    'seventeen',
-    'eighteen',
-    'nineteen'    
-  ]
-  const tens = [
-    'zero',
-    'ten',
-    'twenty',
-    'thirty',
-    'forty',
-    'fifty',
-    'sixty',
-    'seventy',
-    'eighty',
-    'ninety'
-  ]
-  const hundreds = [
-    'zero',
-    'one hundred',
-    'two hunder',
-    'three hunder',
-    'four hunder',
-    'five hunder',
-    'six hunder',
-    'seven hunder',
-    'eight hunder',
-    'nine hunder',
-  ]
-
-  let i
-  let result = []
-  if (number < 20) {
-    for (i = 0; i < numberString.length; i++) {
-      if (numberString[i] == number) return singles[i]
-    }
-  } else if (number >= 20) {
-    if (number % 10 == 0) {
-      for (i = 0; i < 9; i++) {
-        if (numberString[0] == (number / 10)) {
-          return tens[i]
+module.exports = function toReadable(number) {
+  let tens = {
+    20: 'twenty',
+    30: 'thirty',
+    40: 'forty',
+    50: 'fifty',
+    60: 'sixty',
+    70: 'seventy',
+    80: 'eighty',
+    90: 'ninety',
+  };
+  let singles = {
+    0: 'zero',
+    1: 'one',
+    2: 'two',
+    3: 'three',
+    4: "four",
+    5: 'five',
+    6: 'six',
+    7: "seven",
+    8: 'eight',
+    9: 'nine',
+    10: 'ten',
+    11: 'eleven',
+    12: 'twelve',
+    13: 'thirteen',
+    14: 'fourteen',
+    15: 'fifteen',
+    16: 'sixteen',
+    17: 'seventeen',
+    19: 'nineteen',
+    18: 'eighteen',
+  };
+  const num = String(number).split('');
+  if (20 <= number) {
+    if (num.length === 2)
+      if (number % 10 == 0) {
+        return tens[number];
+      } else {
+        for (i = 2; i < 10; i++) {
+          if (num[0] == i) return tens[`${i}0`] + ' ' + singles[num[1]];
         }
       }
-    }
-    // if (numberString.length == 2) {
-    //   for (i = 0; i < 9; i++) {
-    //     if (numberString[0] == i) {
-    //       result[0] = tens[i]
-    //     }
-    //     if (numberString[1] == i) {
-    //       result[1] = singles[i]
-    //     }
-    //     return result.join(' ')
-    //   }
-    // }
+        if (num.length === 3)
+          if (number % 100 != 0) {
+            if (number % 10 === 0)
+              if (num[1] != 2) {
+                if (num[1] != 3) {
+                  for (i = 4; i < 10; i++) {
+                    if (num[1] == i) return singles[parseInt(num[0])] + ' hundred ' + tens[`${i}0`];
+                  }
+                } else {
+                  return singles[parseInt(num[0])] + ' hundred ' + tens[30];
+                }
+              } else {
+                return singles[parseInt(num[0])] + ' hundred ' + tens[20];
+              }
+              if (num[1] == 0) {
+                return singles[parseInt(num[0])] + ' hundred ' + singles[num[2]];
+              }
+              if (num[1] == 1) {
+                for (i = 0; i < 10; i++) {
+                  if (num[2] == i) return singles[parseInt(num[0])] + ' hundred ' + singles[`1${i}`];
+                }
+              }
+              for (i = 2; i < 10; i++) {
+                if (num[1] == i) {
+                  return singles[parseInt(num[0])] + ' hundred ' + tens[`${i}0`] + ' ' + singles[num[2]];
+                }
+              }
+              
+            } else {
+              return singles[parseInt(num[0])] + ' hundred';
+            }
+  } else {
+    return singles[number];
   }
 }
